@@ -99,12 +99,12 @@ public class Main implements DeviceInfo {
         CommandReturn result = ec.executeCommand("who | wc -l");
         loggedInUsers = (int) Float.parseFloat(result.getStdOut());
     }
-
+//memstat parsing change
     private void setFreeRam() {
         CommandReturn result = ec.executeCommand(" free -m | grep Mem | awk  '{print $4}'");
         freeRam = (long) Float.parseFloat(result.getStdOut());
     }
-
+  //memstat parsing change
     private void setTotalRam() {
         CommandReturn result = ec.executeCommand("free -m | grep Mem | awk  '{print $2}'");
         totalRam = (long) Float.parseFloat(result.getStdOut());
@@ -112,7 +112,7 @@ public class Main implements DeviceInfo {
 
     private void setNumberOfCores() {
         CommandReturn result = ec.executeCommand("grep ^processor /proc/cpuinfo | wc -l");
-        numOfCores = (int) Float.parseFloat(result.getStdOut());
+        numOfCores = Integer.parseInt(result.getStdOut().replaceAll("\n", ""));
     }
 
     private void setLoadAverage1min() {
