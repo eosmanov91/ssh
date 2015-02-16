@@ -1,4 +1,4 @@
-package ssh;
+package ua.pp.msk.edem.ssh;
 
 
 public class SecondsToDate {

@@ -5,11 +5,12 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>SshTry</name>
   <description>First Ssh Try</description>
-  <dependencies>
-  	<dependency>
-  		<groupId>ua.pp.msk</groupId>
-  		<artifactId>web-wake-on-lan</artifactId>
-  		<version>0.4</version>
-  	</dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>ua.pp.msk</groupId>
+            <artifactId>HostInfo</artifactId>
+            <version>0.1</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
 </project>
