@@ -24,6 +24,11 @@ public class DeviceInfoImpl implements DeviceInfo {
         return 0;
     }
 
+    
+    /**
+     * Should return simple output of uptime command
+     * @return String stdout of uptime command
+     */
     public String getUptimeInfo() {
         // TODO Auto-generated method stub
         return uptime;
@@ -90,6 +95,8 @@ public class DeviceInfoImpl implements DeviceInfo {
         return numOfCores;
     }
 
+    private static final String LOGINUSERSCMD = "who | wc -l";
+    
     private ExecCommand ec;
     private String hostname;
     private String uptime;
@@ -107,66 +114,68 @@ public class DeviceInfoImpl implements DeviceInfo {
     private  int uptimeupSec;
     private InetAddress ip;
     
-     void setLoggedInUsers() {
-        CommandReturn result = ec.executeCommand("who | wc -l");
+    final void setLoggedInUsers() {
+        CommandReturn result = ec.executeCommand(LOGINUSERSCMD);
         loggedInUsers = (int) Float.parseFloat(result.getStdOut());
     }
 
-     void setFreeRam() {
+    final void setFreeRam() {
         CommandReturn result = ec.executeCommand(" cat /proc/meminfo | grep MemFree | awk '{print $2}'");
         freeRam = (long) Float.parseFloat(result.getStdOut());
     }
   
-     void setTotalRam() {
+    final void setTotalRam() {
         CommandReturn result = ec.executeCommand(" cat /proc/meminfo | grep MemTotal | awk '{print $2}'");
         totalRam = (long) Float.parseFloat(result.getStdOut());
     }
 
-     void setNumberOfCores() {
+    final void setNumberOfCores() {
         CommandReturn result = ec.executeCommand("grep ^processor /proc/cpuinfo | wc -l");
         numOfCores = Integer.parseInt(result.getStdOut().replaceAll("\n", ""));
     }
     
-	 void setUpTime() {
+	final void setUpTime() {
         CommandReturn result = ec.executeCommand("cat /proc/uptime | awk '{print $1}'");
         uptimeup = (long) Float.parseFloat(result.getStdOut().replaceAll("\n", ""));
       
         		//Integer.parseInt(result.getStdOut().replaceAll("\n", ""));
     }
-     void setUpTimeSec()  {
+         
+         //DON'T like it
+    final  void setUpTimeSec()  {
     	CommandReturn result = ec.executeCommand("cat /proc/uptime | awk '{print $1}'");
     	uptimeupSec= (int)  Float.parseFloat(result.getStdOut().replaceAll("\n", ""));
     }
-     void setIdleTimeSec()  {
+    final void setIdleTimeSec()  {
     	CommandReturn result = ec.executeCommand("cat /proc/uptime | awk '{print $2}'");
     	idletimeupSec=   Float.parseFloat(result.getStdOut().replaceAll("\n", ""));
     }
-	 void setLoadAverage1min() {
+	final void setLoadAverage1min() {
         CommandReturn result = ec.executeCommand(" cat /proc/loadavg  | awk '{print $1}'");
         loadAverage1min = Float.parseFloat(result.getStdOut());
     }
 
-     void setLoadAverage5min() {
+    final void setLoadAverage5min() {
         CommandReturn result = ec.executeCommand(" cat /proc/loadavg  | awk '{print $2}'");
         loadAverage5min = Float.parseFloat(result.getStdOut());
     }
 
-     void setLoadAverage15min() {
+    final void setLoadAverage15min() {
         CommandReturn result = ec.executeCommand(" cat /proc/loadavg  | awk '{print $3}'");
         loadAverage15min = Float.parseFloat(result.getStdOut());
     }
 
-     void setLoadAverage() {
+    final void setLoadAverage() {
         CommandReturn result = ec.executeCommand("  cat /proc/loadavg");
         loadAverage = result.getStdOut();
     }
 
-     void setUptimeInfo() {
+    final void setUptimeInfo() {
         CommandReturn result = ec.executeCommand("uptime");
         uptime = result.getStdOut();
     }
 
-     void setMacAddress() {
+    final void setMacAddress() {
         CommandReturn result = ec.executeCommand("cat /sys/class/net/$(cat /proc/net/route | awk '{ if ($2 == 00000000) print $1; }')/address");
         macAddr = result.getStdOut();
     }
@@ -174,9 +183,33 @@ public class DeviceInfoImpl implements DeviceInfo {
     public DeviceInfoImpl(String host, int port, String userName, String passwd) throws UnknownHostException {
         ec = new ExecCommandImpl(host, port, userName, passwd, null);
         this.ip =  Inet4Address.getByName(host);
+        /*
+        Make all commands as a constants or resource bundles to ensure type safety.
+        Make a batch command processing. Something like this:
+        */
+//        String[] commands = new String[]{LOGINUSERSCMD, " cat /proc/meminfo | grep MemFree | awk '{print $2}'", " cat /proc/meminfo | grep MemTotal | awk '{print $2}'", "grep ^processor /proc/cpuinfo | wc -l",
+//        "cat /proc/uptime | awk '{print $1}'", "cat /proc/uptime | awk '{print $1}'", "cat /proc/uptime | awk '{print $1}'" ...};
+//        ec.executeCommand(commands)
+        //It will improve speed in times
+        //Better to move it to some private method init();
+        //And then we can remove final modificator on the setters
+        setFreeRam();
+        setHostname();
+        setIdleTimeSec();
+        setLoadAverage();
+        setLoadAverage15min();
+        setLoadAverage1min();
+        setLoadAverage5min();
+        setLoggedInUsers();
+        setMacAddress();
+        setNumberOfCores();
+        setTotalRam();
+        setUpTime();
+        setUpTimeSec();
+        setUptimeInfo();
     }
 
-     void setHostname() {
+     final void setHostname() {
         CommandReturn result = ec.executeCommand("hostname -f");
         hostname = result.getStdOut();
     }
