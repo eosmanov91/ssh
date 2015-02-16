@@ -1,9 +1,11 @@
 package ua.pp.msk.edem.ssh;
 
+import java.net.UnknownHostException;
+
 public class Main{
-  public static void main(String args[]) {
+  public static void main(String args[]) throws UnknownHostException {
        
-        DeviceInfoImpl m = new DeviceInfoImpl("silhouette.kyi.msk", 22, "edem", "123456");
+        DeviceInfoImpl m = new DeviceInfoImpl("maskimko.msk.pp.ua", 22, "edem", "123456");
         m.setHostname();
         m.setUptimeInfo();
         m.setLoadAverage();

@@ -1,5 +1,10 @@
 package ua.pp.msk.edem.ssh;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.Date;
 import ua.pp.msk.hostinfo.CommandReturn;
 import ua.pp.msk.hostinfo.ExecCommand;
 import ua.pp.msk.hostinfo.ExecCommandImpl;
@@ -51,7 +56,7 @@ public class DeviceInfoImpl implements DeviceInfo {
 
     public String getIpAddress() {
         // TODO Auto-generated method stub
-        return null;
+        return ip.getHostName();
     }
 
     public String getMacAddress() {
@@ -100,6 +105,7 @@ public class DeviceInfoImpl implements DeviceInfo {
     private long uptimeup;
     private float idletimeupSec;
     private  int uptimeupSec;
+    private InetAddress ip;
     
      void setLoggedInUsers() {
         CommandReturn result = ec.executeCommand("who | wc -l");
@@ -165,8 +171,9 @@ public class DeviceInfoImpl implements DeviceInfo {
         macAddr = result.getStdOut();
     }
 
-    public DeviceInfoImpl(String host, int port, String userName, String passwd) {
+    public DeviceInfoImpl(String host, int port, String userName, String passwd) throws UnknownHostException {
         ec = new ExecCommandImpl(host, port, userName, passwd, null);
+        this.ip =  Inet4Address.getByName(host);
     }
 
      void setHostname() {
@@ -192,6 +199,22 @@ public class DeviceInfoImpl implements DeviceInfo {
       sb.append("\nload average 15min is: ").append(getLoadAverage15min());
       sb.append("\nserver is up: ").append(getUpTime());
       return sb.toString();
+    }
+
+    public Calendar getSwitchedOnDate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Date getIdleTimeAsDate() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public InetAddress getInetAddress() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public byte[] getMacBytes() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
   

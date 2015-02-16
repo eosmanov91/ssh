@@ -5,6 +5,10 @@
  */
 package ua.pp.msk.edem.ssh;
 
+import java.net.InetAddress;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  *
  * @author maskimko
@@ -13,9 +17,13 @@ public interface DeviceInfo {
 
     //cat /proc/uptime
     public long getUpTime();
-    
+    /**
+     * Shows the date when computer was turned on
+     * @return Calendar object
+     */
+    public Calendar getSwitchedOnDate();
     public long getIdleTime();
-
+    public Date getIdleTimeAsDate();
     //uptime
 
     public String getUptimeInfo();
@@ -30,9 +38,9 @@ public interface DeviceInfo {
     public int getLoggedInUsers();
 
     public String getIpAddress();
-
+    public InetAddress getInetAddress();
     public String getMacAddress();
-
+    public byte[] getMacBytes();
     public String getHostname();
 
     //cat /proc/meminfo in kb
